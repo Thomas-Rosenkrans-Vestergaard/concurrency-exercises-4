@@ -1,0 +1,8 @@
+Do you get the right result?
+    I do not get the right result.
+What is the problem in the code?
+    The result is not correct since TurnstileCounter.incr() is not thread safe.
+Solve the problem using synchronization techniques.
+    Marking TurnstileCounter.incr() synchronized is an easy fix, only allowing one thread to execute the method at one
+    time.
+    Another fix is to manually maintain a lock.
