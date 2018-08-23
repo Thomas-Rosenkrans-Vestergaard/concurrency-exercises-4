@@ -1,29 +1,31 @@
 package e2;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 public class FibonacciConsumer implements Runnable
 {
 
     private final BlockingQueue<Long> input;
     private long sum = 0;
+    private final Counter counter;
 
-    public FibonacciConsumer(BlockingQueue<Long> input)
+    public FibonacciConsumer(BlockingQueue<Long> input, Counter counter)
     {
         this.input = input;
+        this.counter = counter;
     }
 
     @Override public void run()
     {
         while (true) {
-            try {
-                Long number = input.poll(100, TimeUnit.SECONDS);
-                if (number == null)
-                    return;
+            if (counter.readConsumed() == counter.readProduced())
+                return;
 
-                System.out.println(number);
+            try {
+                Long number = input.take();
                 sum += number;
+                counter.incrementConsumed();
+                System.out.println(number);
 
             } catch (InterruptedException e) {
                 throw new IllegalStateException(e);

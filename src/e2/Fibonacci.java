@@ -14,21 +14,24 @@ public class Fibonacci
 
     private static void fibonacci(BlockingQueue<Long> inputs, int producers) throws Exception
     {
+        Counter counter = new Counter();
+        counter.setProduced(inputs.size());
         BlockingQueue<Long> tunnel = new ArrayBlockingQueue<Long>(inputs.size());
 
         ExecutorService executorService = Executors.newCachedThreadPool();
         for (int x = 1; x <= producers; x++)
-            executorService.execute(new FibonacciProducer(inputs, tunnel));
+            executorService.execute(new FibonacciProducer(inputs, tunnel, counter));
 
-        FibonacciConsumer consumer = new FibonacciConsumer(tunnel);
+        FibonacciConsumer consumer = new FibonacciConsumer(tunnel, counter);
         executorService.execute(consumer);
 
-        executorService.shutdown();
         try {
-            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            executorService.shutdown();
+            executorService.awaitTermination(5, TimeUnit.SECONDS);
             System.out.println("Sum: " + consumer.getSum());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 }
+

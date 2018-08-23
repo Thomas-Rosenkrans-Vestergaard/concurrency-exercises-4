@@ -7,11 +7,13 @@ public class FibonacciProducer implements Runnable
 
     private final BlockingQueue<Long> input;
     private final BlockingQueue<Long> output;
+    private final Counter             counter;
 
-    public FibonacciProducer(BlockingQueue<Long> input, BlockingQueue<Long> output)
+    public FibonacciProducer(BlockingQueue<Long> input, BlockingQueue<Long> output, Counter counter)
     {
         this.input = input;
         this.output = output;
+        this.counter = counter;
     }
 
     @Override public void run()
