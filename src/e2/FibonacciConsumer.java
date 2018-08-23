@@ -18,7 +18,7 @@ public class FibonacciConsumer implements Runnable
     {
         while (true) {
             try {
-                Long number = input.poll(100, TimeUnit.MILLISECONDS);
+                Long number = input.poll(100, TimeUnit.SECONDS);
                 if (number == null)
                     return;
 
