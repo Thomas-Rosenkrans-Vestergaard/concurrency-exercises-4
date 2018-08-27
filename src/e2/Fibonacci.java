@@ -7,9 +7,15 @@ public class Fibonacci
 {
     public static void main(String[] args) throws Exception
     {
+        long start = System.nanoTime();
+
         BlockingQueue<Long> inputs = new ArrayBlockingQueue<Long>(20);
-        inputs.addAll(Arrays.<Long>asList(4l, 5l, 8l, 12l, 21l, 22l, 34l, 35l, 36l, 37l, 42l));
+        inputs.addAll(Arrays.<Long>asList(4l, 5l, 8l, 12l, 21l, 22l, 34l, 35l, 36l, 37l, 42l, 50l));
         fibonacci(inputs, 4);
+
+        long end = System.nanoTime();
+
+        System.out.println("Took " + TimeUnit.NANOSECONDS.toSeconds(end - start) + " seconds");
     }
 
     private static void fibonacci(BlockingQueue<Long> inputs, int producers) throws Exception
@@ -27,7 +33,7 @@ public class Fibonacci
 
         try {
             executorService.shutdown();
-            executorService.awaitTermination(5, TimeUnit.SECONDS);
+            executorService.awaitTermination(5, TimeUnit.MINUTES);
             System.out.println("Sum: " + consumer.getSum());
         } catch (InterruptedException e) {
             e.printStackTrace();
